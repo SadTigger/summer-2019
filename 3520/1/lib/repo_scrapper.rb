@@ -1,4 +1,3 @@
-require 'mechanize'
 require 'webdrivers/geckodriver'
 require 'watir'
 # This class smells of :reek:UtilityFunction and :reek:InstanceVariableAssumption
@@ -6,7 +5,6 @@ class RepoScrapper
   attr_reader :repo_info
 
   def initialize
-    #add check of internet connection Selenium::WebDriver::Error::UnknownError
     @browser = Watir::Browser.new :firefox, headless: true
     @repo_info = {}
   end
@@ -17,7 +15,6 @@ class RepoScrapper
     repo_watch_star_forks
     repo_contributors
     repo_issues
-    repo_info
   end
 
   def github_link
@@ -26,14 +23,22 @@ class RepoScrapper
     elsif check_regexp(@browser.link(text: 'Source Code').href)
       @browser.link(text: 'Source Code').href
     else
-      raise 'there is no link for github from rubygems.org'
+      raise 'There is no link for github from rubygems.org'
     end
   end
 
-  def get_repo_page(link)
+  def get_page(link)
     @browser.goto(link)
+  rescue Selenium::WebDriver::Error::UnknownError
+    puts 'Check internet connection.'
+    exit
+  end
+
+  def get_repo_page(link)
+    get_page(link)
     sleep 0.5
-    @browser.goto(github_link)
+    get_page(github_link)
+    repo_info_parse
   end
 
   def check_regexp(link)

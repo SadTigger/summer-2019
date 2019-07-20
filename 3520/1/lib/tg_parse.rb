@@ -5,24 +5,24 @@ require 'optparse'
 class TGParse
   # This methos smells of :reek:NestedIterators and :reek:UnusedParameters
   def self.parse(args)
-    options = {}
+    @options = {}
     opts = OptionParser.new do |opt|
       opt.banner = 'Usage: top_gems.rb [options]'
 
       opt.on('-t', '--top=TOP', Integer, 'Show toplist of gems.') do |top|
-        options[:top] = top
+        @options[:top] = top
       end
 
-      opt.on('-n', '--name=NAME',String, 'Show list of gems with name is.') do |name|
-        options[:name] = name
+      opt.on('-n', '--name=NAME', String, 'Show list of gems with name is.') do |name|
+        @options[:name] = name
       end
 
       opt.on('-f', '--file=FILE', String, 'Show path for gems.yml.') do |file|
-        options[:file] = file
+        @options[:file] = file
       end
 
       opt.on('-d', '--delete', 'Delete all temp files') do
-        options[:delete] = true
+        @options[:delete] = true
       end
 
       opt.on('-h', '--help', 'Prints this help') do
@@ -32,7 +32,7 @@ class TGParse
     end
 
     opts.parse!(args)
-    options
+    @options
   end
 end
 # rubocop:enable Metrics/MethodLength

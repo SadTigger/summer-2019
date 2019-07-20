@@ -1,10 +1,11 @@
 require 'yaml'
 
+# This class smell of :reek:Attribute
 class RubyGemsLink
   attr_accessor :file
 
   def initialize
-    @file ||= 'gems.yml'
+    @file = 'gems.yml'
     @link = 'https://rubygems.org/gems/'
   end
 
@@ -18,6 +19,7 @@ class RubyGemsLink
 
   def yaml_load
     return YAML.safe_load File.read full_path if file_check
+
     raise "There is no file by file name #{@file}"
   end
 
