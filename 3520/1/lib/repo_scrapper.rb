@@ -29,6 +29,7 @@ class RepoScrapper
 
   def get_page(link)
     @browser.goto(link)
+    sleep 0.5
   rescue Selenium::WebDriver::Error::UnknownError
     puts 'Check internet connection.'
     exit
@@ -36,9 +37,9 @@ class RepoScrapper
 
   def get_repo_page(link)
     get_page(link)
-    sleep 0.5
     get_page(github_link)
     repo_info_parse
+    repo_info.each { |key, val| repo_info[key] = val.delete(',').to_i if key != :name }
   end
 
   def check_regexp(link)
@@ -50,9 +51,9 @@ class RepoScrapper
   end
 
   def repo_used_by
-    @browser.goto(@browser.url + '/network/dependents')
+    get_page @browser.url + '/network/dependents'
     repo_info[:used_by] = @browser.link(href: /dependent_type=REPOSITORY/).text.split(' ').first
-    @browser.goto(@browser.link(text: 'Code').href)
+    get_page @browser.link(text: 'Code').href
   end
 
   def repo_watch_star_forks

@@ -59,8 +59,8 @@ class TopGems
 
   # This method smells of :reek:TooManyStatements
   def run(options)
-    Backup.delete_backup if options[:delete]
-    @rg_links.file = options[:file] if key_shortcut(options) == 'file'
+    Backup.delete_backup if options[:delete] || options.keys.include?(:file)
+    @rg_links.file = options[:file] if options.keys.include?(:file)
     if Backup.backup_check @rg_links
       p 'I found backups!'
       gathering_data
