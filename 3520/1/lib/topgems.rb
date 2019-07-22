@@ -3,6 +3,7 @@ require './lib/rubygems_links'
 require './lib/tg_parse'
 require './lib/output_table'
 require './lib/backup'
+require './lib/option_validation'
 
 class TopGems
   include Backup
@@ -10,14 +11,14 @@ class TopGems
 
   def initialize
     @rg_links = RubyGemsLink.new
-    @scraper = RepoScrapper.new
     @data = []
+    @options = TGParse.parse
   end
 
   def parse_all_links
     @rg_links.yaml_links.each do |link|
-      @scraper.get_repo_page(link)
-      repo_info = @scraper.repo_info
+      scraper = RepoScrapper.new.get_repo_page(link)
+      repo_info = scraper.repo_info
       Backup.backup_create(repo_info[:name], repo_info)
     end
   end
@@ -33,9 +34,9 @@ class TopGems
   end
 
   def create_table(data)
-    @output_table = OutputTable.new
-    data.each { |dat| @output_table.add_value(dat) }
-    puts @output_table.show_table
+    output_table = OutputTable.new
+    data.each { |dat| output_table.add_value(dat) }
+    puts output_table.show_table
   end
 
   def base_table
@@ -56,9 +57,8 @@ class TopGems
     gathering_data
   end
 
-  def run(options)
-    Backup.delete_backup if options[:delete] || options.keys.include?(:file)
-    @rg_links.file = options[:file] if options.keys.include?(:file)
+  def backup
+    @rg_links.file = @options[:file] if OptionValidation.check_option(@options) == 'file'
     if Backup.backup_check @rg_links
       p 'I found backups!'
       gathering_data
@@ -66,26 +66,19 @@ class TopGems
       p 'There is no backups. T_T'
       parse_and_gathering_data
     end
-    show(options)
   end
 
-  def key_shortcut(options)
-    case options.keys.first.to_s
-    when 'name'
-      'by_name'
-    when 'delete' || 'file'
-      'base'
-    when 'top'
-      'toplist'
-    else
-      'base'
-    end
+  def run
+    p @options
+    backup
+    show(@options)
   end
 
   def table_to_show(options)
-    return base_table if key_shortcut(options) == 'base'
-    return gem_toplist(options[:top]) if key_shortcut(options) == 'toplist'
-    return gems_by_name(options[:name]) if key_shortcut(options) == 'by_name'
+    p "#{options} for table_to_show"
+    return base_table if OptionValidation.check_option(options) == 'base'
+    return gem_toplist(options[:top]) if OptionValidation.check_option(options) == 'toplist'
+    return gems_by_name(options[:name]) if OptionValidation.check_option(options) == 'by_name'
 
     raise "Bad options #{options}"
   end

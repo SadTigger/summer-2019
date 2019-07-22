@@ -17,9 +17,10 @@ class RepoScrapper
   end
 
   def github_link
-    if check_regexp(@browser.link(text: 'Homepage').href)
+    p @browser.title
+    if @browser.link(text: 'Homepage').href.include?('github.com')
       @browser.link(text: 'Homepage').href
-    elsif check_regexp(@browser.link(text: 'Source Code').href)
+    elsif @browser.link(text: 'Source Code').href.include?('github.com')
       @browser.link(text: 'Source Code').href
     else
       raise 'There is no link for github from rubygems.org'
@@ -39,10 +40,6 @@ class RepoScrapper
     get_page(github_link)
     repo_info_parse
     repo_info.each { |key, val| repo_info[key] = val.delete(',').to_i if key != :name }
-  end
-
-  def check_regexp(link)
-    link.match?(%r{http[s]*:\/\/[w{3}.]*github.com\/})
   end
 
   def repo_gem_name

@@ -1,34 +1,16 @@
 require 'optparse'
 
 class TGParse
-  def self.parse(args)
+  def initialize
     @options = {}
-    opts = OptionParser.new do |opt|
-      opt.banner = 'Usage: top_gems.rb [options]'
+  end
 
-      opt.on('-t', '--top=TOP', Integer, 'Show toplist of gems.') do |top|
-        @options[:top] = top
-      end
-
-      opt.on('-n', '--name=NAME', String, 'Show list of gems with name is.') do |name|
-        @options[:name] = name
-      end
-
-      opt.on('-f', '--file=FILE', String, 'Show path for gems.yml.') do |file|
-        @options[:file] = file
-      end
-
-      opt.on('-d', '--delete', 'Delete all temp files') do
-        @options[:delete] = true
-      end
-
-      opt.on('-h', '--help', 'Prints this help') do
-        puts opts
-        exit
-      end
-    end
-
-    opts.parse!(args)
+  def self.parse
+    OptionParser.new do |opt|
+      opt.on('-t', '--top=TOP', Integer, 'Show toplist of gems.')
+      opt.on('-n', '--name=NAME', String, 'Show list of gems with name is.')
+      opt.on('-f', '--file=FILE', String, 'Show path for gems.yml.')
+    end.parse!(into: @options)
     @options
   end
 end

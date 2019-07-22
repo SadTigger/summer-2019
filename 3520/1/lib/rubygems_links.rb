@@ -1,7 +1,7 @@
 require 'yaml'
 
 class RubyGemsLink
-  attr_accessor :file
+  attr_writer :file
 
   def initialize
     @file = 'gems.yml'
