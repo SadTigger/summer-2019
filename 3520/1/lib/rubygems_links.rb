@@ -1,6 +1,5 @@
 require 'yaml'
 
-# This class smell of :reek:Attribute
 class RubyGemsLink
   attr_accessor :file
 

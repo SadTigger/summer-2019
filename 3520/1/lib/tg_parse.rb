@@ -1,9 +1,6 @@
 require 'optparse'
 
-# rubocop:disable Metrics/MethodLength
-# This class smells of :reek:TooManyStatements and
 class TGParse
-  # This methos smells of :reek:NestedIterators and :reek:UnusedParameters
   def self.parse(args)
     @options = {}
     opts = OptionParser.new do |opt|
@@ -35,4 +32,3 @@ class TGParse
     @options
   end
 end
-# rubocop:enable Metrics/MethodLength

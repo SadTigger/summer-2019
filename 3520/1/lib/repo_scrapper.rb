@@ -1,6 +1,5 @@
 require 'webdrivers/geckodriver'
 require 'watir'
-# This class smells of :reek:UtilityFunction and :reek:InstanceVariableAssumption
 class RepoScrapper
   attr_reader :repo_info
 

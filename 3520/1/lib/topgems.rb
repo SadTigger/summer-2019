@@ -4,7 +4,6 @@ require './lib/tg_parse'
 require './lib/output_table'
 require './lib/backup'
 
-# This class smell of :reek:InstanceVariableAssumption
 class TopGems
   include Backup
   attr_reader :data
@@ -57,7 +56,6 @@ class TopGems
     gathering_data
   end
 
-  # This method smells of :reek:TooManyStatements
   def run(options)
     Backup.delete_backup if options[:delete] || options.keys.include?(:file)
     @rg_links.file = options[:file] if options.keys.include?(:file)
@@ -71,7 +69,6 @@ class TopGems
     show(options)
   end
 
-  # This method smells of :reek:UtilityFunction
   def key_shortcut(options)
     case options.keys.first.to_s
     when 'name'

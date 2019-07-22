@@ -1,4 +1,3 @@
-# require 'terminal-table'
 require 'tty-table'
 
 HEADER = ['name', 'used by', 'watched by', 'stars', 'forks', 'contributors', 'issues'].freeze
