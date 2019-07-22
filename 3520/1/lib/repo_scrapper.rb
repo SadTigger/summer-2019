@@ -17,7 +17,6 @@ class RepoScrapper
   end
 
   def github_link
-    p @browser.title
     if @browser.link(text: 'Homepage').href.include?('github.com')
       @browser.link(text: 'Homepage').href
     elsif @browser.link(text: 'Source Code').href.include?('github.com')

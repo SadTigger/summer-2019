@@ -7,6 +7,11 @@ class OutputTable
     @table = TTY::Table.new header: HEADER
   end
 
+  def full_table(data)
+    data.each { |dat| add_value(dat) }
+    puts show_table
+  end
+
   def add_value(value)
     @table << value
   end

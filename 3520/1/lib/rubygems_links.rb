@@ -1,11 +1,14 @@
 require 'yaml'
+DEFAULT_FILE = 'gems.yml'.freeze
 
 class RubyGemsLink
-  attr_writer :file
-
   def initialize
-    @file = 'gems.yml'
     @link = 'https://rubygems.org/gems/'
+    @file = file_to_parse
+  end
+
+  def file_to_parse(filename = DEFAULT_FILE)
+    @file = filename
   end
 
   def full_path

@@ -1,12 +1,12 @@
 module OptionValidation
   def self.check_option(options)
-    return 'base' if options.nil?
+    return 'base' if options.empty?
 
     case options.keys.first.to_s
     when 'name'
       'by_name'
     when 'file'
-      'base'
+      'g_file'
     when 'top'
       'toplist'
     end
